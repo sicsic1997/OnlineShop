@@ -63,6 +63,9 @@ namespace OnlineShop
             //    ClientId = "",
             //    ClientSecret = ""
             //});
+
+            app.CreatePerOwinContext<ApplicationRoleManager>(ApplicationRoleManager.Create);
+
         }
     }
 }

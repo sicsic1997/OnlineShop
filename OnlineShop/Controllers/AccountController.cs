@@ -17,6 +17,7 @@ namespace OnlineShop.Controllers
     {
         private ApplicationSignInManager _signInManager;
         private ApplicationUserManager _userManager;
+        private ApplicationDbContext _applicationDbContext = new ApplicationDbContext();
 
         public AccountController()
         {
@@ -151,8 +152,17 @@ namespace OnlineShop.Controllers
         {
             if (ModelState.IsValid)
             {
-                var user = new ApplicationUser { UserName = model.Email, Email = model.Email };
+                var user = new ApplicationUser { UserName = model.Email, Email = model.Email};
                 var result = await UserManager.CreateAsync(user, model.Password);
+                UserRights userRights = new UserRights { UserId = user.Id, CanBuy = true, CanReview = true };
+                try
+                {
+                    _applicationDbContext.UserRights.Add(userRights);
+                    _applicationDbContext.SaveChanges();
+                } catch {
+                    throw;
+                }
+
                 if (result.Succeeded)
                 {
                     await SignInManager.SignInAsync(user, isPersistent:false, rememberBrowser:false);

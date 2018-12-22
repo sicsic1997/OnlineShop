@@ -16,6 +16,8 @@ namespace OnlineShop.Models
             // Add custom user claims here
             return userIdentity;
         }
+
+        public virtual UserRights UserRights { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -25,9 +27,12 @@ namespace OnlineShop.Models
         {
         }
 
+        public DbSet<UserRights> UserRights { get; set; }
+
         public static ApplicationDbContext Create()
         {
             return new ApplicationDbContext();
         }
+
     }
 }

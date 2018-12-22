@@ -1,0 +1,42 @@
+﻿@model IEnumerable<OnlineShop.Models.UserRights>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.ApplicationUser.Email)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CanBuy)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.CanReview)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CanBuy)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.CanReview)
+        </td>
+        <td>
+            @Html.ActionLink("Edit", "Edit", new { id=item.UserId }) |
+            @Html.ActionLink("Details", "Details", new { id=item.UserId })
+        </td>
+    </tr>
+}
+
+</table>
