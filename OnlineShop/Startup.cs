@@ -52,6 +52,16 @@ namespace OnlineShop
                 var role = new IdentityRole();
                 role.Name = "Collaborator";
                 roleManager.Create(role);
+
+                var user = new ApplicationUser();
+                user.UserName = "collaborator@collaborator.com";
+                user.Email = "collaborator@collaborator.com";
+                var collaboratorCreated = UserManager.Create(user, "Collaborator1!");
+                if (collaboratorCreated.Succeeded)
+                {
+                    UserManager.AddToRole(user.Id, "Collaborator");
+                }
+
             }
         }
 

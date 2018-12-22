@@ -1,4 +1,5 @@
-﻿using System.Data.Entity;
+﻿using System.Collections.Generic;
+using System.Data.Entity;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNet.Identity;
@@ -18,6 +19,7 @@ namespace OnlineShop.Models
         }
 
         public virtual UserRights UserRights { get; set; }
+        public virtual ICollection<Product> Products { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -28,6 +30,8 @@ namespace OnlineShop.Models
         }
 
         public DbSet<UserRights> UserRights { get; set; }
+        public DbSet<Categories> Categories { get; set; }
+        public DbSet<Product> Products { get; set; }
 
         public static ApplicationDbContext Create()
         {
