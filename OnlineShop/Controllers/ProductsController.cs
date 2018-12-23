@@ -16,17 +16,40 @@ namespace OnlineShop.Controllers
         private ApplicationDbContext db = new ApplicationDbContext();
 
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(string searchText, int? sortType, string sortOrder)
         {
             var products = db.Products.Include(p => p.ApplicationUser).Include(p => p.Categories);
+
+            searchText = String.IsNullOrEmpty(searchText) ? "" : searchText;
+
+            sortType = sortType.Equals(null) ? 1 : sortType;
+            sortOrder = String.IsNullOrEmpty(sortOrder) ? "rating" : sortOrder;
+
+            ViewBag.sortType = sortType;
+            ViewBag.searchText = searchText;
 
             if (User.IsInRole("User"))
             {
                 products = products.Where(item => item.IsApproved == true);
             }
 
+            products = products.Where(item => item.ProductName.Contains(searchText));
+
+            switch(sortOrder)
+            {
+                case "rating":
+                    products = sortType == 1 ? 
+                        products.OrderBy(s => s.AverageRating) : products.OrderByDescending(s => s.AverageRating);
+                    break;
+                case "price":
+                    products = sortType == 1 ?
+                        products.OrderBy(s => s.Price) : products.OrderByDescending(s => s.Price);
+                    break;
+            }
+
             ViewBag.HasAdminRole = User.IsInRole("Administrator");
             ViewBag.LoggedUserId = User.Identity.GetUserId();
+
             return View(products.ToList());
         }
 
@@ -62,6 +85,8 @@ namespace OnlineShop.Controllers
         public ActionResult Create([Bind(Include = "ProductId,ProductName,ProductDescription,MediaUrl,IsApproved,Price,CategoryId")] Product product)
         {
             product.AuthorId = User.Identity.GetUserId();
+            product.AverageRating = 0;
+            product.NumberOfReviews = 0;
 
             if(User.IsInRole("Administrator"))
             {

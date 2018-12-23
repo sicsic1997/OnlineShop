@@ -9,6 +9,15 @@
 <p>
     @Html.ActionLink("Create New", "Create")
 </p>
+
+@using (Html.BeginForm())
+{
+    <p>
+        Find by name: @Html.TextBox("searchText")
+        <input type="submit" value="Search" />
+    </p>
+}
+
 <table class="table">
     <tr>
         <th>
@@ -27,43 +36,50 @@
             @Html.DisplayNameFor(model => model.IsApproved)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.Price)
+            @Html.ActionLink("Price", "Index", new { sortType = -ViewBag.sortType, sortOrder = "price", searchText = ViewBag.searchText })
+        </th>
+        <th>
+            @Html.ActionLink("Average Rating", "Index", new { sortType = -ViewBag.sortType, sortOrder = "rating", searchText = ViewBag.searchText })
         </th>
         <th></th>
     </tr>
 
-@foreach (var item in Model) {
-    <tr>
-        <td>
-            @Html.DisplayFor(modelItem => item.Categories.Description)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductName)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.ProductDescription)
-        </td>
-        <td>
-            <img src="@Html.DisplayFor(modelItem => item.MediaUrl)" style="width: 100px; height: 100px;"/>
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.IsApproved)
-        </td>
-        <td>
-            @Html.DisplayFor(modelItem => item.Price)
-        </td>
-        <td>
-            @{
-                if (item.AuthorId == ViewBag.LoggedUserId || ViewBag.HasAdminRole)
-                {
-                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) <span>|</span>
-                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId }) <span>|</span>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categories.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescription)
+            </td>
+            <td>
+                <img src="@Html.DisplayFor(modelItem => item.MediaUrl)" style="width: 100px; height: 100px;" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsApproved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AverageRating)
+            </td>
+            <td>
+                @{
+                    if (item.AuthorId == ViewBag.LoggedUserId || ViewBag.HasAdminRole)
+                    {
+                        @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) <span>|</span>
+                        @Html.ActionLink("Delete", "Delete", new { id = item.ProductId }) <span>|</span>
 
+                    }
                 }
-            }
-            @Html.ActionLink("Details", "Details", new { id = item.ProductId })
-        </td>
-    </tr>
-}
+                @Html.ActionLink("Details", "Details", new { id = item.ProductId })
+            </td>
+        </tr>
+    }
 
 </table>

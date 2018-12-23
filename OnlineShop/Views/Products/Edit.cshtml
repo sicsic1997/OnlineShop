@@ -16,6 +16,8 @@
     <hr />
     @Html.ValidationSummary(true, "", new { @class = "text-danger" })
     @Html.HiddenFor(model => model.ProductId)
+    @Html.HiddenFor(model => model.NumberOfReviews)
+    @Html.HiddenFor(model => model.AverageRating)
 
     <div class="form-group">
         @Html.LabelFor(model => model.ProductName, htmlAttributes: new { @class = "control-label col-md-2" })
@@ -41,17 +43,18 @@
         </div>
     </div>
 
-    @{if (ViewBag.HasAdminRole) {
-        <div class="form-group">
-            @Html.LabelFor(model => model.IsApproved, htmlAttributes: new { @class = "control-label col-md-2" })
-            <div class="col-md-10">
-                <div class="checkbox">
-                    @Html.EditorFor(model => model.IsApproved)
-                    @Html.ValidationMessageFor(model => model.IsApproved, "", new { @class = "text-danger" })
+    @{if (ViewBag.HasAdminRole)
+        {
+            <div class="form-group">
+                @Html.LabelFor(model => model.IsApproved, htmlAttributes: new { @class = "control-label col-md-2" })
+                <div class="col-md-10">
+                    <div class="checkbox">
+                        @Html.EditorFor(model => model.IsApproved)
+                        @Html.ValidationMessageFor(model => model.IsApproved, "", new { @class = "text-danger" })
+                    </div>
                 </div>
             </div>
-        </div>
-    }}
+        }}
 
     <div class="form-group">
         @Html.LabelFor(model => model.Price, htmlAttributes: new { @class = "control-label col-md-2" })

@@ -20,6 +20,7 @@ namespace OnlineShop.Models
 
         public virtual UserRights UserRights { get; set; }
         public virtual ICollection<Product> Products { get; set; }
+        public virtual ICollection<Reviews> Reviews { get; set; }
     }
 
     public class ApplicationDbContext : IdentityDbContext<ApplicationUser>
@@ -33,6 +34,7 @@ namespace OnlineShop.Models
         public DbSet<Categories> Categories { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductRequests> ProductRequests { get; set; }
+        public DbSet<Reviews> Reviews { get; set; }
 
         public static ApplicationDbContext Create()
         {

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace OnlineShop.Models
@@ -22,6 +23,11 @@ namespace OnlineShop.Models
 
         public float Price { get; set; }
 
+        [Display(Name = "Rating")]
+        public float AverageRating { get; set; }
+
+        public int NumberOfReviews { get; set; }
+
         [ForeignKey("Categories")]
         public int CategoryId { get; set; }
 
@@ -31,5 +37,6 @@ namespace OnlineShop.Models
         public virtual ProductRequests ProductRequests { get; set; }
         public virtual Categories Categories { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
+        public virtual ICollection<Reviews> Reviews { get; set; }
     }
 }

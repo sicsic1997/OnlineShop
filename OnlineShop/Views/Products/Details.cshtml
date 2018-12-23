@@ -66,9 +66,27 @@
             @Html.DisplayFor(model => model.Price)
         </dd>
 
+        <dt>
+            @Html.DisplayNameFor(model => model.AverageRating)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.AverageRating)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NumberOfReviews)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NumberOfReviews)
+        </dd>
+
     </dl>
 </div>
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ProductId }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("Back to products", "Index", new { id = Model.ProductId }) |
+    @Html.ActionLink("Add a review", "Create", "Reviews", new { id = Model.ProductId }, null) | 
+    @Html.ActionLink("View all reviews", "Index", "Reviews", new { id = Model.ProductId }, null)
 </p>
