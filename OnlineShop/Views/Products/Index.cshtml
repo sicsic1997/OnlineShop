@@ -12,9 +12,6 @@
 <table class="table">
     <tr>
         <th>
-            @Html.DisplayNameFor(model => model.ApplicationUser.Email)
-        </th>
-        <th>
             @Html.DisplayNameFor(model => model.Categories.Description)
         </th>
         <th>
@@ -38,9 +35,6 @@
 @foreach (var item in Model) {
     <tr>
         <td>
-            @Html.DisplayFor(modelItem => item.ApplicationUser.Email)
-        </td>
-        <td>
             @Html.DisplayFor(modelItem => item.Categories.Description)
         </td>
         <td>
@@ -50,7 +44,7 @@
             @Html.DisplayFor(modelItem => item.ProductDescription)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.MediaUrl)
+            <img src="@Html.DisplayFor(modelItem => item.MediaUrl)" style="width: 100px; height: 100px;"/>
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.IsApproved)
@@ -59,9 +53,15 @@
             @Html.DisplayFor(modelItem => item.Price)
         </td>
         <td>
-            @Html.ActionLink("Edit", "Edit", new { id=item.ProductId }) |
-            @Html.ActionLink("Details", "Details", new { id=item.ProductId }) |
-            @Html.ActionLink("Delete", "Delete", new { id=item.ProductId })
+            @{
+                if (item.AuthorId == ViewBag.LoggedUserId || ViewBag.HasAdminRole)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) <span>|</span>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId }) <span>|</span>
+
+                }
+            }
+            @Html.ActionLink("Details", "Details", new { id = item.ProductId })
         </td>
     </tr>
 }

@@ -1,0 +1,56 @@
+﻿@model IEnumerable<OnlineShop.Models.ProductRequests>
+
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+
+<p>
+    @Html.ActionLink("Create New", "Create")
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Product.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductRequestsDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsApproved)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Product.ProductName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.ProductRequestsDescription)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.IsApproved)
+        </td>
+        <td>
+            @{
+                if (item.IsApproved == false)
+                {
+                    @Html.ActionLink("Edit", "Edit", new { id = item.ProductId }) 
+                    <span>|</span>
+                    @Html.ActionLink("Delete", "Delete", new { id = item.ProductId })
+                }
+
+                if (item.IsApproved == false && ViewBag.hasAdministratorRole)
+                {
+                    <span>|</span> 
+                    @Html.ActionLink("Approve", "Approve", new { id = item.ProductId })
+                }
+            }
+        </td>
+    </tr>
+}
+
+</table>

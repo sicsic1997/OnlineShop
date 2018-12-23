@@ -28,6 +28,7 @@ namespace OnlineShop.Models
         [ForeignKey("ApplicationUser")]
         public string AuthorId { get; set; }
 
+        public virtual ProductRequests ProductRequests { get; set; }
         public virtual Categories Categories { get; set; }
         public virtual ApplicationUser ApplicationUser { get; set; }
     }

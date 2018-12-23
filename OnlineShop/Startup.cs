@@ -61,7 +61,6 @@ namespace OnlineShop
                 {
                     UserManager.AddToRole(user.Id, "Collaborator");
                 }
-
             }
         }
 

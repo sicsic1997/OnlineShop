@@ -7,6 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using OnlineShop.Models;
+using Microsoft.AspNet.Identity;
 
 namespace OnlineShop.Controllers
 {
@@ -18,6 +19,14 @@ namespace OnlineShop.Controllers
         public ActionResult Index()
         {
             var products = db.Products.Include(p => p.ApplicationUser).Include(p => p.Categories);
+
+            if (User.IsInRole("User"))
+            {
+                products = products.Where(item => item.IsApproved == true);
+            }
+
+            ViewBag.HasAdminRole = User.IsInRole("Administrator");
+            ViewBag.LoggedUserId = User.Identity.GetUserId();
             return View(products.ToList());
         }
 
@@ -38,9 +47,8 @@ namespace OnlineShop.Controllers
 
         // GET: Products/Create
         [Authorize(Roles = "Administrator, Collaborator")]
-        public ActionResult Create()
+        public  ActionResult Create()
         {
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "Email");
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoriesId", "Description");
             return View();
         }
@@ -51,16 +59,22 @@ namespace OnlineShop.Controllers
         [Authorize(Roles = "Administrator, Collaborator")]
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ProductId,ProductName,ProductDescription,MediaUrl,IsApproved,Price,CategoryId,AuthorId")] Product product)
+        public ActionResult Create([Bind(Include = "ProductId,ProductName,ProductDescription,MediaUrl,IsApproved,Price,CategoryId")] Product product)
         {
+            product.AuthorId = User.Identity.GetUserId();
+
+            if(User.IsInRole("Administrator"))
+            {
+                product.IsApproved = true;
+            }
+
             if (ModelState.IsValid)
             {
                 db.Products.Add(product);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
-
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "Email", product.AuthorId);
+            
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoriesId", "Description", product.CategoryId);
             return View(product);
         }
@@ -78,7 +92,7 @@ namespace OnlineShop.Controllers
             {
                 return HttpNotFound();
             }
-            ViewBag.AuthorId = new SelectList(db.Users, "Id", "Email", product.AuthorId);
+            ViewBag.HasAdminRole = User.IsInRole("Administrator");
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoriesId", "Description", product.CategoryId);
             return View(product);
         }
