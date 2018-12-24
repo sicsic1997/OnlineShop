@@ -1,0 +1,77 @@
+﻿@model IEnumerable<OnlineShop.Models.Product>
+
+@{
+    ViewBag.Title = "ViewCart";
+}
+
+<h2>My cart</h2>
+
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Categories.Description)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.ProductDescription)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.MediaUrl)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.IsApproved)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Price)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.AverageRating)
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.Categories.Description)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductName)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.ProductDescription)
+            </td>
+            <td>
+                <img src="@Html.DisplayFor(modelItem => item.MediaUrl)" style="width: 100px; height: 100px;" />
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.IsApproved)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.Price)
+            </td>
+            <td>
+                @Html.DisplayFor(modelItem => item.AverageRating)
+            </td>
+            <td>
+                @Html.ActionLink("Details", "Details", new { id = item.ProductId }) <span>|</span>
+                @Html.ActionLink("Remove from cart", "RemoveFromCartCookie", new { id = item.ProductId })
+            </td>
+        </tr>
+    }
+
+
+
+
+
+</table>
+
+@{
+    if (Model != null && Model.Count() > 0 && ViewBag.HasRolesToBuy == true)
+    {
+        @Html.ActionLink("Buy items from cart", "BuyFromCart")
+    }
+}

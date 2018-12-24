@@ -169,6 +169,117 @@ namespace OnlineShop.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Roles = "User,Collaborator,Administrator")]
+        public ActionResult AddToCartCookie(int id)
+        {
+            // Encoded like id1|id2|id3
+            if (Request.Cookies["CartCookie"] == null)
+            {
+                Response.Cookies["CartCookie"].Value = id.ToString();
+            }
+            else
+            {
+                // First check if exists
+                string objCartListString = Request.Cookies["CartCookie"].Value.ToString();
+                string[] objCartListStringSplit = objCartListString.Split('|');
+                foreach (string s in objCartListStringSplit)
+                {
+                    if(s == "")
+                    {
+                        continue;
+                    }
+
+                    int currentProductId = int.Parse(s);
+                    if (currentProductId == id)
+                    {
+                        return RedirectToAction("Index");
+                    }
+                }
+                Response.Cookies["CartCookie"].Value = Request.Cookies["CartCookie"].Value + "|" + id.ToString();
+            }
+
+            Response.Cookies["CartCookie"].Expires = DateTime.Now.AddYears(30);
+            return RedirectToAction("Index"); ;
+        }
+
+        [Authorize(Roles = "User,Collaborator,Administrator")]
+        public ActionResult RemoveFromCartCookie(int id)
+        {
+            if (Request.Cookies["CartCookie"] == null)
+            {
+                return RedirectToAction("Index"); ;
+            }
+            else
+            {
+                // First check if exists
+                string objCartListString = Request.Cookies["CartCookie"].Value.ToString();
+                string[] objCartListStringSplit = objCartListString.Split('|');
+                string newCookie = "";
+                foreach (string s in objCartListStringSplit)
+                {
+                    if(s == "")
+                    {
+                        continue;
+                    }
+                    int currentProductId = int.Parse(s);
+                    if (currentProductId == id)
+                    {
+                        continue;
+                    }
+                    if (newCookie != "")
+                        newCookie = newCookie + "|";
+                    newCookie  = newCookie + currentProductId.ToString();
+                }
+                Response.Cookies["CartCookie"].Value = newCookie;
+            }
+
+            Response.Cookies["CartCookie"].Expires = DateTime.Now.AddYears(30);
+            return RedirectToAction("Index"); ;
+        }
+
+        /// GET
+        [Authorize(Roles = "User,Collaborator,Administrator")]
+        public ActionResult ViewCart()
+        {
+            List<Product> productList = new List<Product>();
+            if(Request.Cookies["CartCookie"] != null && Request.Cookies["CartCookie"].Value != null)
+            {
+                var productListFromCookies = Request.Cookies["CartCookie"].Value;
+                string[] objCartListStringSplit = productListFromCookies.Split('|');
+                foreach (string s in objCartListStringSplit)
+                {
+                    if (s == "")
+                    {
+                        continue;
+                    }
+                    int currentProductId = int.Parse(s);
+                    productList.Add(db.Products.Find(currentProductId));
+                }
+            }
+
+            var currentUserRights = db.UserRights.Find(User.Identity.GetUserId());
+            if(currentUserRights == null)
+            {
+                //It's manager or collaborator autocreated
+                ViewBag.HasRolesToBuy = true;
+            }
+            else
+            {
+                ViewBag.HasRolesToBuy = currentUserRights.CanBuy;
+            }
+
+            return View(productList);
+        }
+
+        [Authorize(Roles = "User,Collaborator,Administrator")]
+        public ActionResult BuyFromCart()
+        {
+            Response.Cookies["CartCookie"].Value = null;
+            return View();
+        }
+
+
+
         protected override void Dispose(bool disposing)
         {
             if (disposing)

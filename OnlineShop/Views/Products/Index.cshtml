@@ -77,7 +77,35 @@
 
                     }
                 }
-                @Html.ActionLink("Details", "Details", new { id = item.ProductId })
+                @Html.ActionLink("Details", "Details", new { id = item.ProductId }) <span>|</span>
+                @{
+                    var productsInCarListCookie = Request.Cookies["CartCookie"];
+                    if (productsInCarListCookie != null)
+                    {
+                        var productsInCarList = productsInCarListCookie.Value;
+                        var inCart = false;
+                        string[] cartItems = productsInCarList.Split('|');
+                        foreach (string s in cartItems)
+                        {
+                            if (s != "" && int.Parse(s) == item.ProductId)
+                            {
+                                inCart = true;
+                            }
+                        }
+                        if (inCart == true)
+                        {
+                            @Html.ActionLink("Remove from cart", "RemoveFromCartCookie", new { id = item.ProductId })
+                        }
+                        else
+                        {
+                            @Html.ActionLink("Add to cart", "AddToCartCookie", new { id = item.ProductId })
+                        }
+                    }
+                    else
+                    {
+                        @Html.ActionLink("Add to cart", "AddToCartCookie", new { id = item.ProductId })
+                    }
+                }
             </td>
         </tr>
     }
