@@ -5,6 +5,7 @@ namespace OnlineShop.Models
 {
     public class UserRights
     {
+        [Required]
         [Key, ForeignKey("ApplicationUser")]
         public string UserId { get; set; }
         [Display(Name = "Can buy?")]

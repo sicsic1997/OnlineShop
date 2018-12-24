@@ -9,9 +9,12 @@ namespace OnlineShop.Models
         [Key]
         public int ProductId { get; set; }
 
+        [Required]
+        [MaxLength(50)]
         [Display(Name = "Name")]
         public string ProductName { get; set; }
 
+        [MaxLength(500)]
         [Display(Name = "Description")]
         public string ProductDescription { get; set; }
 
@@ -21,6 +24,7 @@ namespace OnlineShop.Models
         [Display(Name = "Is approved")]
         public bool IsApproved { get; set; }
 
+        [Required]
         public float Price { get; set; }
 
         [Display(Name = "Rating")]
@@ -28,6 +32,7 @@ namespace OnlineShop.Models
 
         public int NumberOfReviews { get; set; }
 
+        [Required]
         [ForeignKey("Categories")]
         public int CategoryId { get; set; }
 

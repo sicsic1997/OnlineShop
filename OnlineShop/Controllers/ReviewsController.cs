@@ -26,6 +26,10 @@ namespace OnlineShop.Controllers
             ViewBag.Product = db.Products.Find(id);
             ViewBag.LoggedUserId = User.Identity.GetUserId();
             ViewBag.HasAdministratorRole = User.IsInRole("Administrator");
+
+            var currentUserRights = db.UserRights.Find(User.Identity.GetUserId());
+            ViewBag.canAddReview = currentUserRights == null ? false : currentUserRights.CanReview;
+
             return View(reviews.ToList());
         }
 
@@ -41,6 +45,7 @@ namespace OnlineShop.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.LoggedUserId = User.Identity.GetUserId();
             ViewBag.HasAdministratorRole = User.IsInRole("Administrator");
             return View(reviews);

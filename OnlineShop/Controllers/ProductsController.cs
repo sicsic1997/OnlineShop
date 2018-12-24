@@ -65,6 +65,10 @@ namespace OnlineShop.Controllers
             {
                 return HttpNotFound();
             }
+
+            var currentUserRights = db.UserRights.Find(User.Identity.GetUserId());
+            ViewBag.canAddReview = currentUserRights == null ? false : currentUserRights.CanReview;
+
             return View(product);
         }
 
@@ -117,6 +121,7 @@ namespace OnlineShop.Controllers
             {
                 return HttpNotFound();
             }
+
             ViewBag.HasAdminRole = User.IsInRole("Administrator");
             ViewBag.CategoryId = new SelectList(db.Categories, "CategoriesId", "Description", product.CategoryId);
             return View(product);

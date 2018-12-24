@@ -75,7 +75,7 @@
         </dd>
 
         <dt>
-            @Html.DisplayNameFor(model => model.NumberOfReviews)
+            @Html.DisplayNameFor(model => model.NumberOfReviews)        
         </dt>
 
         <dd>
@@ -87,6 +87,11 @@
 <p>
     @Html.ActionLink("Edit", "Edit", new { id = Model.ProductId }) |
     @Html.ActionLink("Back to products", "Index", new { id = Model.ProductId }) |
-    @Html.ActionLink("Add a review", "Create", "Reviews", new { id = Model.ProductId }, null) | 
+    @{ 
+        if(ViewBag.canAddReview)
+        {
+            @Html.ActionLink("Add a review", "Create", "Reviews", new { id = Model.ProductId }, null) <span>|</span>
+        }
+    }
     @Html.ActionLink("View all reviews", "Index", "Reviews", new { id = Model.ProductId }, null)
 </p>

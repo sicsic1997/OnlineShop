@@ -9,6 +9,7 @@ namespace OnlineShop.Models
         public int CategoriesId { get; set; }
 
         [Display(Name = "Category")]
+        [Required]
         public string Description { get; set; }
 
         public virtual ICollection<Product> Products { get; set; }

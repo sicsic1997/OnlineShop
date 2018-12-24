@@ -12,8 +12,13 @@ namespace OnlineShop.Models
         [Key]
         public int Id { get; set; }
 
+        [Required]
+        [Range(0, 5)]
         public int Rating { get; set; }
 
+        [Required]
+        [MinLength(10)]
+        [MaxLength(500)]
         public string Comment { get; set; }
 
         [ForeignKey("Product")]

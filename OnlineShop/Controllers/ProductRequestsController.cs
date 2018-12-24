@@ -11,6 +11,7 @@ using OnlineShop.Models;
 
 namespace OnlineShop.Controllers
 {
+    [Authorize(Roles ="Administrator, Collaborator")]
     public class ProductRequestsController : Controller
     {
         private ApplicationDbContext db = new ApplicationDbContext();
